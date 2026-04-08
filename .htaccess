@@ -1,0 +1,110 @@
+# .htaccess Configuration for Software Consultants
+# Clean URLs and SEO-friendly URL rewriting for Hostinger
+# Removes .html extensions and creates clean URLs
+
+# Enable mod_rewrite
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Set the base directory for rewrites
+RewriteBase /
+
+# ============================================================================
+# STEP 1: REDIRECT .HTML URLS TO CLEAN URLS (SEO 301 Redirects)
+# ============================================================================
+
+# Redirect index.html to root
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Redirect all other .html files to clean URLs (e.g., /about.html -> /about)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_FILENAME} \.html$ [NC]
+RewriteRule ^(.*)\.html$ /$1 [R=301,L]
+
+# ============================================================================
+# STEP 2: REWRITE CLEAN URLS TO .HTML FILES (Internal rewrite)
+# ============================================================================
+
+# Don't rewrite if it's a real file or directory
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Special case: rewrite root requests to index.html
+RewriteRule ^$ index.html [L]
+
+# Special case: /home requests serve index.html
+RewriteRule ^home/?$ index.html [L]
+
+# Rewrite clean URLs to .html files (e.g., /about -> /about.html)
+RewriteRule ^([a-zA-Z0-9_-]+)/?$ $1.html [L]
+
+# Rewrite subdirectory clean URLs (e.g., /services/web-development -> /services/web-development.html)
+RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/?$ $1/$2.html [L]
+
+# Rewrite deeper paths if needed
+RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/?$ $1/$2/$3.html [L]
+
+# ============================================================================
+# PREVENT DIRECT ACCESS TO SENSITIVE FILES
+# ============================================================================
+
+<FilesMatch "\.(php|phtml|php3|php4|php5|php6|php7|phps|pht|phar)$">
+    # Allow contact-handler.php to be accessed
+    <FilesMatch "contact-handler\.php$">
+        Allow from all
+    </FilesMatch>
+</FilesMatch>
+
+# ============================================================================
+# SECURITY AND PERFORMANCE HEADERS
+# ============================================================================
+
+# Disable directory listing
+Options -Indexes +FollowSymLinks
+
+# Set proper MIME types
+AddType application/javascript js
+AddEncoding gzip svgz
+
+# Compress text-based files
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Set proper caching headers
+<IfModule mod_expires.c>
+    ExpiresActive On
+    # HTML - cache for 1 hour
+    ExpiresByType text/html "access plus 1 hour"
+    # CSS & JS - cache for 1 month
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    # Images - cache for 3 months
+    ExpiresByType image/jpeg "access plus 3 months"
+    ExpiresByType image/gif "access plus 3 months"
+    ExpiresByType image/png "access plus 3 months"
+    ExpiresByType image/svg+xml "access plus 3 months"
+    # Fonts - cache for 1 year
+    ExpiresByType font/truetype "access plus 1 year"
+    ExpiresByType font/opentype "access plus 1 year"
+    ExpiresByType application/x-font-woff "access plus 1 year"
+    # Set default cache
+    ExpiresDefault "access plus 1 day"
+</IfModule>
+
+</IfModule>
+
+# ============================================================================
+# PHP CONFIGURATION (if needed for Hostinger)
+# ============================================================================
+
+# Set PHP version (uncomment if needed based on your Hostinger setup)
+# AddType application/x-httpd-php56 .php
+# AddType application/x-httpd-php70 .php
+# AddType application/x-httpd-php71 .php
+# AddType application/x-httpd-php72 .php
+# AddType application/x-httpd-php73 .php
+# AddType application/x-httpd-php74 .php
+# AddType application/x-httpd-php80 .php
+

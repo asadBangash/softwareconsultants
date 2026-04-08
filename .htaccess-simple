@@ -1,0 +1,32 @@
+# SIMPLE HTACCESS FOR TESTING
+# If this works, the complex one should too
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# First, serve real files and directories as-is
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Redirect .html files to clean URLs (301 redirect)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([a-zA-Z0-9_-]+)\.html [NC]
+RewriteRule ^([a-zA-Z0-9_-]+)\.html$ /$1 [R=301,L]
+
+# Rewrite clean URLs to .html files
+RewriteRule ^([a-zA-Z0-9_-]+)/?$ $1.html [L]
+
+# Rewrite /directory/page URLs
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/?$ $1/$2.html [L]
+
+# Handle paths three levels deep (e.g., /services/api-development)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d  
+RewriteRule ^(.+)/(.+)\.html$ $1/$2.html [L]
+
+</IfModule>
+
+Options -Indexes

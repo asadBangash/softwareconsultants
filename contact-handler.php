@@ -152,7 +152,7 @@ try {
         http_response_code(500);
         exit(json_encode([
             'success' => false,
-            'message' => 'We encountered an error while sending your message. Please contact us directly at info@softwaresconsultants.com or call +1 (240) 615-7589'
+            'message' => 'We encountered an error while sending your message. Please contact us directly at info@softwaresconsultants.com or call +1 (336) 615-2689'
         ]));
     }
 } catch (Exception $e) {
@@ -247,7 +247,7 @@ function buildUserConfirmationEmail($first_name) {
         <div class="content">
             <p>We received your inquiry and appreciate your interest in Software Consultants LLC.</p>
             <p>Our team will review your message and get back to you within 24 business hours.</p>
-            <p>If you need to reach us sooner, feel free to call us at <strong>+1 (240) 615-7589</strong> or email <strong>info@softwaresconsultants.com</strong></p>
+            <p>If you need to reach us sooner, feel free to call us at <strong>+1 (336) 615-2689</strong> or email <strong>info@softwaresconsultants.com</strong></p>
             <p>Best regards,<br><strong>Software Consultants LLC</strong></p>
         </div>
         <div class="footer">

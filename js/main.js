@@ -1,6 +1,7 @@
 
 // Main JS - Animations & Interactions
 document.addEventListener('DOMContentLoaded',function(){
+if (typeof fixFileProtocolLinks === 'function') fixFileProtocolLinks();
 // Scroll animations
 const observer = new IntersectionObserver((entries)=>{
 entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});

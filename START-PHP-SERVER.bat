@@ -13,14 +13,14 @@ cd /d "%~dp0"
 
 echo Starting PHP web server on http://localhost:8000
 echo.
-echo Port: 8000
-echo URL: http://localhost:8000/contact
+echo Clean URLs enabled (no .html in address bar)
+echo Example: http://localhost:8000/about
 echo.
 echo Press Ctrl+C to stop the server
 echo.
 
-REM Start PHP built-in server
-php -S localhost:8000
+REM Start PHP built-in server with clean URL router
+php -S localhost:8000 router.php
 
 if errorlevel 1 (
     echo.

@@ -36,6 +36,10 @@ RewriteRule ^$ index.html [L]
 # Special case: /home requests serve index.html
 RewriteRule ^home/?$ index.html [L]
 
+# Section index pages
+RewriteRule ^services/?$ services/index.html [L]
+RewriteRule ^industries/?$ industries/index.html [L]
+
 # Rewrite clean URLs to .html files (e.g., /about -> /about.html)
 RewriteRule ^([a-zA-Z0-9_-]+)/?$ $1.html [L]
 

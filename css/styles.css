@@ -1177,13 +1177,32 @@ footer {
     margin-top: 40px
 }
 
-.footer-logo {
+.footer-brand {
     margin-bottom: 16px
 }
 
-.footer-logo img {
-    height: 48px;
-    filter: brightness(0) invert(1)
+.footer-brand a {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700
+}
+
+.footer-brand a:hover {
+    color: var(--accent)
+}
+
+.footer-contact li {
+    color: rgba(255, 255, 255, .6);
+    font-size: .9rem;
+    line-height: 1.6
+}
+
+.footer-contact a {
+    color: rgba(255, 255, 255, .6)
+}
+
+.footer-contact a:hover {
+    color: var(--accent)
 }
 
 /* WhatsApp Widget */

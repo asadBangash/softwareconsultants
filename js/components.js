@@ -1,8 +1,22 @@
 
 // Shared Components - Software Consultants
 (function () {
-    const LOGO = 'https://codewords-uploads.s3.amazonaws.com/runtime_v2/03c2f9df26794adb87d673e33bb9cf16f5bcbffb53b344b6929f5a56c75a294c/sc-logo-black-116734611641674576049.png';
-    const basePath = document.body.dataset.depth === '1' ? '../' : '';
+    const isFileProtocol = location.protocol === 'file:';
+    const depth = document.body.dataset.depth === '1' ? '../' : '';
+
+    function pageUrl(cleanPath) {
+        if (isFileProtocol) {
+            if (!cleanPath) return depth + 'index.html';
+            if (cleanPath === 'services' || cleanPath === 'industries') {
+                return depth + cleanPath + '/index.html';
+            }
+            return depth + cleanPath + '.html';
+        }
+        return cleanPath ? '/' + cleanPath : '/';
+    }
+
+    const homeUrl = pageUrl('');
+    const LOGO_BLACK = (isFileProtocol ? depth : '/') + 'images/software-consultants-logo-black.png';
 
     function getTopBar() {
         return `<div class="top-bar"><div class="container"><div class="top-bar-left"><a href="mailto:info@softwaresconsultants.com">✉ info@softwaresconsultants.com</a><a href="tel:+13366152689">☎ +1 (336) 615-2689</a></div><div class="top-bar-right"><a href="https://www.linkedin.com/company/90810275/admin/dashboard/" target="_blank" title="LinkedIn">in</a><a href="https://www.facebook.com/softwaresconsultants" target="_blank" title="Facebook">f</a></div></div></div>`;
@@ -10,16 +24,15 @@
 
     function getHeader() {
         const page = document.body.dataset.page || 'home';
-        const bp = basePath;
         const services = [
             { name: 'Web Development', slug: 'web-development' }, { name: 'Mobile App Development', slug: 'mobile-app-development' }, { name: 'Custom Software', slug: 'custom-software-development' }, { name: 'Shopify Development', slug: 'shopify-development' }, { name: 'WooCommerce Development', slug: 'woocommerce-development' }, { name: 'UI/UX Design', slug: 'ui-ux-design' }, { name: 'DevOps & Cloud', slug: 'devops-cloud' }, { name: 'QA & Testing', slug: 'qa-testing' }, { name: 'API Development', slug: 'api-development' }, { name: 'ERP/CRM Solutions', slug: 'erp-crm-solutions' }, { name: 'Database Design', slug: 'database-design' }, { name: 'IT Consulting', slug: 'it-consulting' }
         ];
         const industries = [
             { name: 'Healthcare', slug: 'healthcare' }, { name: 'Finance & Banking', slug: 'finance-banking' }, { name: 'E-commerce', slug: 'e-commerce' }, { name: 'Logistics & Transportation', slug: 'logistics-transportation' }, { name: 'Education', slug: 'education' }, { name: 'Real Estate', slug: 'real-estate' }, { name: 'Manufacturing', slug: 'manufacturing' }
         ];
-        const svcDropdown = services.map(s => `<li><a href="${bp}services/${s.slug}.html">${s.name}</a></li>`).join('');
-        const indDropdown = industries.map(i => `<li><a href="${bp}industries/${i.slug}.html">${i.name}</a></li>`).join('');
-        return `<header class="site-header" id="siteHeader"><div class="container navbar-wrapper"><div class="logo"><a href="${bp}home"><img src="${LOGO}" alt="Software Consultants"></a></div><nav class="nav-right" id="navRight"><ul class="nav-list"><li><a href="${bp}home" class="${page === 'home' ? 'active' : ''}">Home</a></li><li class="nav-dropdown"><a href="${bp}services/index.html" class="${page === 'services' ? 'active' : ''}">Services ▾</a><ul class="dropdown-menu">${svcDropdown}</ul></li><li class="nav-dropdown"><a href="${bp}industries/index.html" class="${page === 'industries' ? 'active' : ''}">Industries ▾</a><ul class="dropdown-menu">${indDropdown}</ul></li><li><a href="${bp}about.html" class="${page === 'about' ? 'active' : ''}">About</a></li><li><a href="${bp}contact.html" class="${page === 'contact' ? 'active' : ''}">Contact</a></li><li><a href="${bp}contact.html" class="btn-accent" style="padding:8px 20px;font-size:13px">Get a Quote</a></li></ul></nav><button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button></div></header>`;
+        const svcDropdown = services.map(s => `<li><a href="${pageUrl('services/' + s.slug)}">${s.name}</a></li>`).join('');
+        const indDropdown = industries.map(i => `<li><a href="${pageUrl('industries/' + i.slug)}">${i.name}</a></li>`).join('');
+        return `<header class="site-header" id="siteHeader"><div class="container navbar-wrapper"><div class="logo"><a href="${homeUrl}"><img src="${LOGO_BLACK}" alt="Software Consultants"></a></div><nav class="nav-right" id="navRight"><ul class="nav-list"><li><a href="${homeUrl}" class="${page === 'home' ? 'active' : ''}">Home</a></li><li class="nav-dropdown"><a href="${pageUrl('services')}" class="${page === 'services' ? 'active' : ''}">Services ▾</a><ul class="dropdown-menu">${svcDropdown}</ul></li><li class="nav-dropdown"><a href="${pageUrl('industries')}" class="${page === 'industries' ? 'active' : ''}">Industries ▾</a><ul class="dropdown-menu">${indDropdown}</ul></li><li><a href="${pageUrl('about')}" class="${page === 'about' ? 'active' : ''}">About</a></li><li><a href="${pageUrl('contact')}" class="${page === 'contact' ? 'active' : ''}">Contact</a></li><li><a href="${pageUrl('contact')}" class="btn-accent" style="padding:8px 20px;font-size:13px">Get a Quote</a></li></ul></nav><button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button></div></header>`;
     }
 
     function getWhatsAppWidget() {
@@ -27,31 +40,43 @@
     }
 
     function getFooter() {
-        const bp = basePath;
-        return `<footer><div class="container"><div class="footer-grid"><div class="footer-col"><div class="footer-logo"><a href="${bp}home"><img src="https://codewords-uploads.s3.amazonaws.com/runtime_v2/03c2f9df26794adb87d673e33bb9cf16f5bcbffb53b344b6929f5a56c75a294c/sc-logo-black-116734611641674576049.png" alt="Software Consultants"></a></div><p>Turning Concepts Into Reality. We deliver custom software solutions, IT consulting, and digital transformation services for businesses worldwide.</p></div><div class="footer-col"><h4>Quick Links</h4><ul><li><a href="${bp}home">Home</a></li><li><a href="${bp}about.html">About Us</a></li><li><a href="${bp}services/index.html">Services</a></li><li><a href="${bp}industries/index.html">Industries</a></li><li><a href="${bp}contact.html">Contact Us</a></li></ul></div><div class="footer-col"><h4>Our Services</h4><ul><li><a href="${bp}services/web-development.html">Web Development</a></li><li><a href="${bp}services/mobile-app-development.html">Mobile Apps</a></li><li><a href="${bp}services/custom-software-development.html">Custom Software</a></li><li><a href="${bp}services/shopify-development.html">Shopify Development</a></li><li><a href="${bp}services/devops-cloud.html">DevOps & Cloud</a></li><li><a href="${bp}services/ui-ux-design.html">UI/UX Design</a></li></ul></div><div class="footer-col"><h4>Contact Us</h4><ul><li>📍 6829 Keeneland Dr, Whitsett, NC 27377</li><li>📞 +1 (336) 615-2689</li><li>💬 <a href="https://wa.me/923171448616" target="_blank" title="WhatsApp">WhatsApp</a></li><li>✉ info@softwaresconsultants.com</li><li>🕐 Mon-Fri: 9:00 AM - 6:00 PM</li></ul></div></div><div class="footer-bottom"><span>&copy; ${new Date().getFullYear()} Software Consultants LLC. All rights reserved.</span><div class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Sitemap</a></div></div></div></footer>`;
+        return `<footer><div class="container"><div class="footer-grid"><div class="footer-col"><h4 class="footer-brand"><a href="${homeUrl}">Software Consultants</a></h4><p>Turning Concepts Into Reality. We deliver custom software solutions, IT consulting, and digital transformation services for businesses worldwide.</p></div><div class="footer-col"><h4>Quick Links</h4><ul><li><a href="${homeUrl}">Home</a></li><li><a href="${pageUrl('about')}">About Us</a></li><li><a href="${pageUrl('services')}">Services</a></li><li><a href="${pageUrl('industries')}">Industries</a></li><li><a href="${pageUrl('contact')}">Contact Us</a></li></ul></div><div class="footer-col"><h4>Our Services</h4><ul><li><a href="${pageUrl('services/web-development')}">Web Development</a></li><li><a href="${pageUrl('services/mobile-app-development')}">Mobile Apps</a></li><li><a href="${pageUrl('services/custom-software-development')}">Custom Software</a></li><li><a href="${pageUrl('services/shopify-development')}">Shopify Development</a></li><li><a href="${pageUrl('services/devops-cloud')}">DevOps & Cloud</a></li><li><a href="${pageUrl('services/ui-ux-design')}">UI/UX Design</a></li></ul></div><div class="footer-col"><h4>Contact Us</h4><ul class="footer-contact"><li>6829 Keeneland Dr, Whitsett, NC 27377</li><li><a href="tel:+13366152689">+1 (336) 615-2689</a></li><li><a href="https://wa.me/923171448616" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="mailto:info@softwaresconsultants.com">info@softwaresconsultants.com</a></li><li>Mon–Fri: 9:00 AM – 6:00 PM</li></ul></div></div><div class="footer-bottom"><span>&copy; ${new Date().getFullYear()} Software Consultants LLC. All rights reserved.</span><div class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Sitemap</a></div></div></div></footer>`;
     }
 
-    // Inject components
+    function fixFileProtocolLinks() {
+        if (!isFileProtocol) return;
+        document.querySelectorAll('a[href^="/"]').forEach(function (a) {
+            var href = a.getAttribute('href');
+            if (href === '/') {
+                a.setAttribute('href', depth + 'index.html');
+            } else if (href === '/services' || href === '/industries') {
+                a.setAttribute('href', depth + href.slice(1) + '/index.html');
+            } else {
+                a.setAttribute('href', depth + href.slice(1) + '.html');
+            }
+        });
+    }
+
+    window.fixFileProtocolLinks = fixFileProtocolLinks;
+
     const topbarEl = document.getElementById('topbar-placeholder');
     const headerEl = document.getElementById('header-placeholder');
     const footerEl = document.getElementById('footer-placeholder');
     if (topbarEl) topbarEl.innerHTML = getTopBar();
     if (headerEl) headerEl.innerHTML = getHeader();
     if (footerEl) footerEl.innerHTML = getFooter();
+    fixFileProtocolLinks();
 
-    // Inject WhatsApp widget
     const body = document.body;
     const whatsappWidget = document.createElement('div');
     whatsappWidget.innerHTML = getWhatsAppWidget();
     body.appendChild(whatsappWidget.firstElementChild);
 
-    // Mobile menu toggle
-    setTimeout(() => {
+    setTimeout(function () {
         const toggle = document.getElementById('menuToggle');
         const nav = document.getElementById('navRight');
         if (toggle && nav) {
-            toggle.addEventListener('click', () => { nav.classList.toggle('open'); });
+            toggle.addEventListener('click', function () { nav.classList.toggle('open'); });
         }
     }, 100);
 })();
-
